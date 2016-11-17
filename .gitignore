@@ -1,0 +1,13 @@
+/bower_components/
+/node_modules/
+/.pulp-cache/
+/output/
+/.psci*
+/src/.webpack.js
+/.psci_modules
+/html/background.js
+/release
+/html/
+.psc-ide-port
+/debug/
+/.vscode

@@ -1,0 +1,27 @@
+{
+    "name": "Okky filter",
+    "description": "Okky site content filter",
+    "version": "1.0.0",
+
+    "permissions": [
+      "storage",
+      "tabs"
+    ],
+    
+    "content_scripts": [
+        {
+        "matches": [ "http://okky.kr/*"],
+        "js": ["content.min.js"],
+        "run_at": "document_start"
+        }
+    ],
+
+    "background": {
+      "scripts": ["background.min.js"],
+      "persistent": true
+    },
+
+    "options_page": "options.html",
+
+    "manifest_version":2
+}
