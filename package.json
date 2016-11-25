@@ -1,7 +1,7 @@
 {
-  "name": "okky-filter",
+  "name": "okkyext",
   "version": "1.0.0",
-  "description": "okky.kr user filter",
+  "description": "okky.kr extension",
   "main": "support/options-entry.js",
   "scripts": {
     "postinstall": "bower install",
@@ -35,7 +35,7 @@
     "serve": "http-server static --cors -p 3000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "taemu",
+  "author": "jo-taro",
   "dependencies": {
     "bootstrap": "^3.3.7",
     "bower": "^1.8.0",

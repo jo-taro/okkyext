@@ -1,6 +1,6 @@
 {
-    "name": "Okky filter Debug",
-    "description": "Okky site content filter",
+    "name": "Okky Extension Debug",
+    "description": "okky.kr browser extension",
     "version": "1.0.0",
 
     "permissions": [
