@@ -160,6 +160,12 @@ update (DateChange dateTime) state = noEffects $
     Left _ -> L.set atStateDate "error" state
     Right x -> L.set atStateDate x state
 
+-- color related states
+update (TextColorChange event) state = noEffects $
+  L.set atTextColor event.target.value state
+
+update (BackColorChange event) state = noEffects $
+  L.set atBackColor event.target.value state
 
 -- crude operation states
 update AddEntry state =

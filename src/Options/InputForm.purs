@@ -10,6 +10,7 @@ import Common
 import Prelude ((<>), ($), negate, const, (/=))
 import Options.Common
 import Data.Tuple (Tuple(Tuple))
+-- import SketchExample as S
 
 
 -- Input form components
@@ -27,6 +28,7 @@ renderInsertForm state = do
         [ linkRow state
         , nameRow state
         , noteRow state
+        , colorRow state
         , dateRow state
         , addRow state
         ]
@@ -138,6 +140,56 @@ dateRow state =
             , readOnly true
             , tabIndex (-1)
             ]
+            []
+        ]
+    ]
+
+colorRow :: State -> Html Action
+colorRow state =
+  div
+    [ className "form-group" ]
+    [ label
+        [ attr "for" "inputColors", className "col-sm-2 control-label"]
+        [ text "색상"]
+    , div
+        [ className "col-sm-2"
+        , style [ Tuple "text-align" "center"]
+        ]
+        [ div 
+            [ id_ "inputColors"
+            , className "btn-group"
+            ]
+            [ span
+                [ className "btn"
+                , style [ Tuple "padding" "0rem"
+                        , Tuple "margin" "0.5rem 0rem 0.5rem 0rem"
+                        ] 
+                ] 
+                [ input 
+                    [ type_ "color"
+                    , value (L.view atTextColor state)
+                    , PE.onChange TextColorChange 
+                    ] [] 
+                ]
+            , span
+                [ className "btn"
+                , style [ Tuple "padding" "0rem"
+                        , Tuple "margin" "0.5rem 0rem 0.5rem 0rem"
+                        ]
+                ]
+                [ input 
+                    [ type_ "color"
+                    , value (L.view atBackColor state)
+                    , PE.onChange BackColorChange
+                    ] []
+                ]
+            ]
+        ]
+    , div
+        [className "col-sm-8"]
+        [ input 
+            [ className "form-control"
+            , value "텍스트 컬러 테스트"] 
             []
         ]
     ]

@@ -27,6 +27,8 @@ init =
   , delBtnDisabled : false
   , isloading : Idle
   , linkInputDisabled : true
+  , textColor : "#d3d3d3"
+  , backColor : "#ffffff"
   , parseWorkerFilename : "parseworker.min.js"
   }
 
@@ -38,6 +40,8 @@ initDebug =
   , delBtnDisabled : false
   , isloading : Idle
   , linkInputDisabled : true
+  , textColor : "#d3d3d3"
+  , backColor : "#ffffff"
   , parseWorkerFilename : "parseworker.js"
   }
 

@@ -7,13 +7,14 @@ module Options.Common
 
 import Common
 import Pux.Html.Events as PE
+import Control.Monad.Eff.Exception (Error)
 import Data.DateTime (DateTime)
+import Data.Either (Either)
+import Data.Foreign.Class (read, readProp, class IsForeign)
+import Data.Foreign.Class (readEitherR)
 import Data.Generic (class Generic, gEq)
 import Prelude (class Eq, (>>=), ($), pure)
-import Data.Foreign.Class (read, readProp, class IsForeign)
-import Data.Either (Either)
-import Control.Monad.Eff.Exception (Error)
-import Data.Foreign.Class (readEitherR)
+import Text.Parsing.Parser.String (class StringLike)
 
 data Action =
     ReadComplete Blacklist
@@ -32,7 +33,9 @@ data Action =
   -- date
   | DateChange DateTime
   | UpdateCurrentTime
-
+  -- color
+  | TextColorChange PE.FormEvent
+  | BackColorChange PE.FormEvent
   -- crude operations on the list
   | AddEntry
   | AddDeleteQueue BlacklistEntry
@@ -63,9 +66,12 @@ type State =
   , delBtnDisabled :: Boolean
   , isloading :: NickCheckStatus
   , linkInputDisabled :: Boolean
+  , textColor :: String
+  , backColor :: String
   , parseWorkerFilename :: String -- this is readonly.
   }
 
 newtype Message = Message {message :: String}
 instance isForeignMessage :: IsForeign Message where
   read obj = readProp "message" obj >>= \message -> pure $ Message {message}
+

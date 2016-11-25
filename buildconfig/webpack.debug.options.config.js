@@ -27,7 +27,17 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.js$/, loader: 'source-map-loader', exclude: /node_modules|bower_components/ },
+      // { test: /\.js$/,
+      //   loader: 'source-map-loader',
+      //   exclude: /node_modules|bower_components/ 
+      // },
+      { test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules|bower_components/,
+        query: {
+          presets: ['es2015']
+        }
+      }, 
       {
         test: /\.purs$/,
         loader: 'purs-loader',

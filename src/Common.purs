@@ -16,6 +16,8 @@ module Common
     , atDelBtnDisabled
     , atLinkInputDisabled
     , atIsloading
+    , atTextColor
+    , atBackColor
     , atName
     , atNote
     , atDate
@@ -190,6 +192,19 @@ atIsloading ::
   -> p { isloading :: a | r } { isloading :: b | r }
 atIsloading = isloading
 
+atTextColor ::
+  forall p a b r. (Strong p) =>
+  p a b
+  -> p { textColor :: a | r } { textColor :: b | r }
+atTextColor = textColor
+
+atBackColor ::
+  forall p a b r. (Strong p) =>
+  p a b
+  -> p { backColor :: a | r } { backColor :: b | r }
+atBackColor = backColor
+
+
 delBtnDisabled :: forall a b r. Lens { "delBtnDisabled" :: a | r } { "delBtnDisabled" :: b | r } a b
 delBtnDisabled = lens _."delBtnDisabled" (_ { "delBtnDisabled" = _ })
 
@@ -210,6 +225,12 @@ link = lens _."link" (_ { "link" = _ })
 
 isloading :: forall a b r. Lens { "isloading" :: a | r } { "isloading" :: b | r } a b
 isloading = lens _."isloading" (_ { "isloading" = _ })
+
+textColor :: forall a b r. Lens { "textColor" :: a | r } { "textColor" :: b | r } a b
+textColor = lens _."textColor" (_ { "textColor" = _ })
+
+backColor :: forall a b r. Lens { "backColor" :: a | r } { "backColor" :: b | r } a b
+backColor = lens _."backColor" (_ { "backColor" = _ })
 
 
 name :: forall a b r. Lens { "name" :: a | r } { "name" :: b | r } a b
