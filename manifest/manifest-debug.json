@@ -1,7 +1,7 @@
 {
     "name": "Okky Extension Debug",
     "description": "okky.kr browser extension",
-    "version": "1.0.0",
+    "version": "1.1.0",
 
     "permissions": [
       "storage",

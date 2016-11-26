@@ -1,15 +1,16 @@
 module Content where
 
-import Prelude (Unit,bind,(<>),(>>=))
+import Prelude (Unit,bind,(<>),(>>=), ($), (==), when)
 import Data.Foldable (for_)
 import Control.Monad.Eff.JQuery (remove, select, setText, find, css, ready)
-import JQuery (parents)
-import ChromeAPI (Command(..), ResponseData(..), sendMessage)
-import Common (ChromeEffects)
+import JQuery (parents, cssp)
+import ChromeAPI (sendMessage)
+import ChromeMessages (Command(..), ResponseData(..))
+import Common (ChromeEffects, BlacklistEntry, atLink, atBlockText, atTextColor, atBackColor)
+import Data.Lens (view) as L 
 
 import Control.Monad.Eff.Console (logShow)
 
-type UserName = String
 data BLockMethod = BLIND | REMOVE
 
 type BlindConfig = { pointer_events :: String
@@ -20,9 +21,9 @@ type BlindConfig = { pointer_events :: String
                    , replacedText :: String
                    }
 
-blindUserItem :: forall eff. BlindConfig -> UserName -> ChromeEffects eff Unit
-blindUserItem config href = do
-    item <- select groupSelector >>= find (nickSelectorByHref href)
+blindUserItem :: forall eff. BlindConfig -> BlacklistEntry -> ChromeEffects eff Unit
+blindUserItem config entry = do
+    item <- select groupSelector >>= find (nickSelectorByHref $ L.view atLink entry)
                                  >>= parents itemSelector
     heading <- find headingSelector item
     avatar  <- find avatarSelector item
@@ -30,21 +31,22 @@ blindUserItem config href = do
     for_ [heading, avatar, article] blindTag
     where
       blindTag tag = do
-        setText config.replacedText tag
-        css config tag
+        let textColor = L.view atTextColor entry 
+            backColor = L.view atBackColor entry
+        cssp { color : textColor, background_color: backColor } tag
+        when (L.view atBlockText entry ==  "true") (setText config.replacedText tag) 
         -- setProp "href" "..." tag
 
-removeUserItem :: forall eff. UserName -> ChromeEffects eff Unit
-removeUserItem href = do
-    item <- select groupSelector >>= find (nickSelectorByHref href)
+removeUserItem :: forall eff. BlacklistEntry -> ChromeEffects eff Unit
+removeUserItem entry = do
+    item <- select groupSelector >>= find (nickSelectorByHref $ L.view atLink entry)
                                  >>= parents itemSelector
     remove item
-
 
 groupSelector :: String
 groupSelector = ".list-group"
 
-nickSelectorByHref :: UserName -> String
+nickSelectorByHref :: String -> String
 nickSelectorByHref href = ".nickname[href='" <> href <> "']"
 
 itemSelector :: String
@@ -78,7 +80,7 @@ method = BLIND
 handleResponse :: forall eff. ResponseData -> ChromeEffects eff Unit
 handleResponse (ResponseData resp) = do
     let users  = resp.data
-    logShow users
+    -- logShow users
     case method of
       BLIND  -> for_ users (blindUserItem blindConfig)
       REMOVE -> for_ users (removeUserItem)

@@ -95,6 +95,7 @@ update LinkAjaxFetch state =
           httpResponse <- attempt $ affjax request
           pure $ case httpResponse of
             Left  err  -> AutoNameChange (message err) NetworkFail
+            -- Left  err  -> LinkParse "foooooo"
             Right resp -> LinkParse resp.response
       ]
   }
@@ -120,6 +121,7 @@ update (LinkParse htmlText) state = onlyEffects state $
       liftEff $ terminateWorker parseWorker
       pure $ case mess of
         Left err  -> AutoNameChange (message err) ParseFail
+        -- Left err  -> AutoNameChange "fooo" Success
         Right res -> AutoNameChange res Success
   ]
 
@@ -161,18 +163,19 @@ update (DateChange dateTime) state = noEffects $
     Right x -> L.set atStateDate x state
 
 -- color related states
+update (BlockTextChange event) state = noEffects $
+  L.set atStateBlockText (show event.target.checked) state
+
 update (TextColorChange event) state = noEffects $
-  L.set atTextColor event.target.value state
+  L.set atStateTextColor event.target.value state
 
 update (BackColorChange event) state = noEffects $
-  L.set atBackColor event.target.value state
+  L.set atStateBackColor event.target.value state
 
 -- crude operation states
 update AddEntry state =
-  { state : L.set atStateLink "" >>>
-            L.set atStateName "" >>>
-            L.set atStateNote "" >>>
-            L.set atIsloading Idle  >>>
+  { state : L.set atEntry defaultEntry >>>
+            L.set atIsloading Idle >>>
             L.over atBlackUsers (\x -> snoc x state.entry)  $ state
   , effects :
       [ pure $ WriteItem ]

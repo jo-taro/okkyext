@@ -1,5 +1,6 @@
 module JQuery where
 
+import Prelude (Unit)
 import Control.Monad.Eff (Eff)
 import DOM (DOM)
 import Control.Monad.Eff.JQuery (JQuery, Selector)
@@ -11,3 +12,10 @@ foreign import parents
    . Selector
   -> JQuery
   -> Eff (dom :: DOM | eff) JQuery
+
+-- | Set CSS properties.
+foreign import cssp
+  :: forall eff css
+   . { | css }
+  -> JQuery
+  -> Eff (dom :: DOM | eff) Unit

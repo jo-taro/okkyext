@@ -34,6 +34,7 @@ data Action =
   | DateChange DateTime
   | UpdateCurrentTime
   -- color
+  | BlockTextChange PE.FormEvent
   | TextColorChange PE.FormEvent
   | BackColorChange PE.FormEvent
   -- crude operations on the list
@@ -66,8 +67,7 @@ type State =
   , delBtnDisabled :: Boolean
   , isloading :: NickCheckStatus
   , linkInputDisabled :: Boolean
-  , textColor :: String
-  , backColor :: String
+  , blockText :: Boolean
   , parseWorkerFilename :: String -- this is readonly.
   }
 

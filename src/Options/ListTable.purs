@@ -7,7 +7,7 @@ import Pux.Html.Attributes
 import Pux.Html.Events as PE
 import Data.Lens as L
 import Common
-import Prelude (($), (<>), (<$>), const)
+import Prelude (($), (<>), (<$>), const, (==))
 import Options.Common
 import Data.Tuple (Tuple(Tuple))
 import Data.Array (elem)
@@ -27,6 +27,8 @@ renderUserList state = do
             [ tr
                 []
                 [ th [ nameStyle ] [ text "사용자 정보" ]
+                , th [ blockStyle ] [ text "차단" ]
+                , th [ colorStyle ] [ text "색상" ]
                 , th [ noteStyle ] [ text "메모" ]
                 , th [ dateStyle ] [ text "기록시각" ]
                 , th [] [ text "" ]
@@ -35,7 +37,6 @@ renderUserList state = do
         , tbody [] $  (renderUser state) <$> (L.view atBlackUsers state)
         ]
     ]
-
 
 renderUser :: State -> BlacklistEntry -> Html Action
 renderUser state entry =
@@ -50,6 +51,20 @@ renderUser state entry =
                 [ href $ "http://okky.kr" <> L.view atLink entry ]
                 [text $ L.view atLink entry]
               ]
+        , td
+            [blockStyle]
+            [
+              text $ if L.view atBlockText entry == "true" then "예" else ""
+            ]
+        , td 
+            [ colorStyle] 
+            [ input [ type_ "color"
+                    , disabled true
+                    , value $ L.view atTextColor entry ] []
+            , input [ type_ "color"
+                    , disabled true
+                    , value $ L.view atBackColor entry ] []
+            ]
         , td [ noteStyle] [ text $ L.view atNote entry ]
         , td [ dateStyle] [ text $ L.view atDate entry ]
         , td
@@ -72,10 +87,16 @@ renderUser state entry =
         ]
 
 nameStyle ::Attribute Action
-nameStyle = style $ [ Tuple "width" "25%" ]
+nameStyle = style $ [ Tuple "width" "20%" ]
+
+blockStyle ::Attribute Action
+blockStyle = style $ [ Tuple "width" "10%" ]
+
+colorStyle ::Attribute Action
+colorStyle = style $ [ Tuple "width" "5%" ]
 
 noteStyle ::Attribute Action
-noteStyle = style $ [ Tuple "width" "50%" ]
+noteStyle = style $ [ Tuple "width" "40%" ]
 
 dateStyle ::Attribute Action
 dateStyle = style $ [ Tuple "width" "25%" ]

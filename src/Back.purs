@@ -4,7 +4,8 @@ import Common (ChromeEffects, readLocalStorage, atBlackUserEntries, atLink)
 import Data.Functor ((<$>))
 import Data.Lens (view) as L
 import Data.Lens.Fold (toListOf) as F
-import ChromeAPI (Command, Sender, ResponseData(..), addListener, unwrapCommand)
+import ChromeAPI (addListener)
+import ChromeMessages (Command, Sender, ResponseData(..), unwrapCommand)
 import Prelude (bind, Unit, ($), (>>=), (==))
 import Data.Array (fromFoldable)
 
@@ -21,10 +22,10 @@ handleResponse :: forall eff.
 handleResponse command sender sendResponse = do
   result <- readLocalStorage
   let cmd = unwrapCommand command
-      blackUserLinks = (L.view atLink) <$> (F.toListOf atBlackUserEntries result)
+      blackUsers = F.toListOf atBlackUserEntries result
 
   if cmd.method == "getLocalStorage"
-    then sendResponse $ ResponseData { data : fromFoldable blackUserLinks }
+    then sendResponse $ ResponseData { data : fromFoldable blackUsers }
     else sendResponse $ ResponseData { data : [] }
 
 

@@ -1,5 +1,6 @@
 module Options.InputForm 
   ( renderInsertForm
+  ,  colorPicker
   ) where
 
 import Pux.Html hiding (style)
@@ -7,7 +8,7 @@ import Pux.Html.Attributes hiding (label,form)
 import Pux.Html.Events as PE
 import Data.Lens as L
 import Common
-import Prelude ((<>), ($), negate, const, (/=))
+import Prelude ((<>), ($), negate, const, (/=), (==))
 import Options.Common
 import Data.Tuple (Tuple(Tuple))
 -- import SketchExample as S
@@ -146,53 +147,77 @@ dateRow state =
 
 colorRow :: State -> Html Action
 colorRow state =
-  div
-    [ className "form-group" ]
-    [ label
-        [ attr "for" "inputColors", className "col-sm-2 control-label"]
-        [ text "색상"]
-    , div
-        [ className "col-sm-2"
-        , style [ Tuple "text-align" "center"]
-        ]
-        [ div 
-            [ id_ "inputColors"
-            , className "btn-group"
-            ]
-            [ span
-                [ className "btn"
-                , style [ Tuple "padding" "0rem"
-                        , Tuple "margin" "0.5rem 0rem 0.5rem 0rem"
-                        ] 
-                ] 
-                [ input 
-                    [ type_ "color"
-                    , value (L.view atTextColor state)
-                    , PE.onChange TextColorChange 
-                    ] [] 
-                ]
-            , span
-                [ className "btn"
-                , style [ Tuple "padding" "0rem"
-                        , Tuple "margin" "0.5rem 0rem 0.5rem 0rem"
+  let blockText = L.view atStateBlockText state == "true"
+  in
+      div !
+        className "form-group"
+        ##
+        [ label
+            [ attr "for" "checkBlock", className "col-sm-2 control-label"]
+            [ text "차단"]
+        , div 
+            [ className "col-sm-1"]
+            [ input 
+                [ className "form-control col-sm-1"
+                , style [ Tuple "outline" "none"
+                        , Tuple "border" "none"
+                        , Tuple "-webkit-box-shadow" "none"
+                        , Tuple "-moz-box-shadow" "none"
+                        , Tuple "box-shadow" "none"
+                        , Tuple "margin" "0rem"
                         ]
-                ]
-                [ input 
-                    [ type_ "color"
-                    , value (L.view atBackColor state)
-                    , PE.onChange BackColorChange
-                    ] []
-                ]
+                , type_ "checkbox"
+                , id_ "checkBlock"
+                , PE.onChange BlockTextChange
+                , checked $ blockText
+                ] 
+                []
             ]
-        ]
-    , div
-        [className "col-sm-8"]
-        [ input 
-            [ className "form-control"
-            , value "텍스트 컬러 테스트"] 
-            []
-        ]
-    ]
+        ]  <> (colorPicker state)  
+
+colorPicker :: State -> Array (Html Action)
+colorPicker state =
+      [ label
+          [ attr "for" "inputColors"
+          , className "col-sm-1 control-label"
+          ]
+          [ text "색상"]
+      , div
+          [ className "col-sm-2"
+          , style [ Tuple "text-align" "center"
+                  ]
+          ]
+          [ div 
+              [ id_ "inputColors"
+              , className "btn-group"
+              ]
+              [ span
+                  [ className "btn"
+                  , style [ Tuple "padding" "0rem"
+                          , Tuple "margin" "0.5rem 0rem 0.5rem 0rem"
+                          ] 
+                  ] 
+                  [ input 
+                      [ type_ "color"
+                      , value (L.view atStateTextColor state)
+                      , PE.onChange TextColorChange 
+                      ] [] 
+                  ]
+              , span
+                  [ className "btn"
+                  , style [ Tuple "padding" "0rem"
+                          , Tuple "margin" "0.5rem 0rem 0.5rem 0rem"
+                          ]
+                  ]
+                  [ input 
+                      [ type_ "color"
+                      , value (L.view atStateBackColor state)
+                      , PE.onChange BackColorChange
+                      ] []
+                  ]
+              ]
+          ]
+      ] 
 
 addRow :: State -> Html Action
 addRow state =
@@ -206,3 +231,4 @@ addRow state =
             [ text "추가" ]
         ]
     ]
+

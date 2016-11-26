@@ -39,7 +39,7 @@ module.exports = {
           comments: false, // Eliminate comments
           compress: {
             warnings: false, // Compression specific options
-            drop_console: true // Drop `console` statements
+            drop_console: false // Drop `console` statements
           },
           mangle: { // Mangling specific options
             // except: ['$'], // Don't mangle $

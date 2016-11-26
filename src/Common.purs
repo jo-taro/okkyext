@@ -16,11 +16,15 @@ module Common
     , atDelBtnDisabled
     , atLinkInputDisabled
     , atIsloading
-    , atTextColor
-    , atBackColor
+    , atStateBlockText
+    , atStateTextColor
+    , atStateBackColor
     , atName
     , atNote
     , atDate
+    , atBlockText
+    , atTextColor
+    , atBackColor
     , blacklistKey
     , defaultList
     , defaultEntry
@@ -30,6 +34,7 @@ module Common
     , atDeleteQueue
     , atDeleteQueueBlackUsers
     ) where
+
 
 import Data.Lens
 import Data.Either as Either
@@ -66,6 +71,9 @@ newtype BlacklistEntry =
                        , name :: String
                        , note :: String
                        , date :: String
+                       , blockText :: String 
+                       , textColor :: String
+                       , backColor :: String
                        }
 
 derive instance genericBlacklistEntry :: Generic BlacklistEntry
@@ -85,7 +93,7 @@ blacklistKey :: ExampleKey Blacklist
 blacklistKey = BlacklistKey
 
 defaultEntry :: BlacklistEntry
-defaultEntry = BlacklistEntry { link:"", name:"",note:"",date:"" }
+defaultEntry = BlacklistEntry { link:"", name:"",note:"",date:"", blockText: "true", textColor: "#d3d3d3", backColor: "#ffffff" }
 
 defaultList :: Blacklist
 defaultList = Blacklist { blackUsers :[] }
@@ -108,6 +116,12 @@ type StateEntryStringAccessor =
   forall r p. (Strong p, Choice p) =>
   p String String
   -> p { entry :: BlacklistEntry | r } { entry :: BlacklistEntry | r }
+
+-- type StateEntryBooleanAccessor =
+--   forall r p. (Strong p, Choice p) =>
+--   p Boolean Boolean
+--   -> p { entry :: BlacklistEntry | r } { entry :: BlacklistEntry | r }
+
 
 atBlackUsers ::
   forall r p. (Strong p, Choice p) =>
@@ -133,11 +147,26 @@ atStateNote = note >>> _BlacklistEntry >>> entry
 atStateDate :: StateEntryStringAccessor
 atStateDate = date >>> _BlacklistEntry >>> entry
 
+atStateTextColor :: StateEntryStringAccessor
+atStateTextColor = textColor >>> _BlacklistEntry >>> entry
+
+atStateBackColor :: StateEntryStringAccessor
+atStateBackColor = backColor >>> _BlacklistEntry >>> entry
+
+atStateBlockText :: StateEntryStringAccessor
+atStateBlockText = blockText >>> _BlacklistEntry >>> entry
+
+
 atBlackUserEntries = traversed  >>> blackUsers >>> _Blacklist
 
 type EntryStringAccessor =
   forall p. (Strong p, Choice p) =>
   p String String
+  -> p BlacklistEntry BlacklistEntry
+
+type EntryBooleanAccessor =
+  forall p. (Strong p, Choice p) =>
+  p Boolean Boolean
   -> p BlacklistEntry BlacklistEntry
 
 atLink :: EntryStringAccessor
@@ -152,6 +181,14 @@ atNote = note >>> _BlacklistEntry
 atDate :: EntryStringAccessor
 atDate = date >>> _BlacklistEntry
 
+atBlockText :: EntryStringAccessor
+atBlockText = blockText >>> _BlacklistEntry
+
+atTextColor :: EntryStringAccessor
+atTextColor = textColor >>> _BlacklistEntry
+
+atBackColor :: EntryStringAccessor
+atBackColor = backColor >>> _BlacklistEntry
 
 -- All codes below this line can be generated from 
 -- https://github.com/paf31/purescript-derive-lenses
@@ -192,17 +229,17 @@ atIsloading ::
   -> p { isloading :: a | r } { isloading :: b | r }
 atIsloading = isloading
 
-atTextColor ::
-  forall p a b r. (Strong p) =>
-  p a b
-  -> p { textColor :: a | r } { textColor :: b | r }
-atTextColor = textColor
+-- atTextColor ::
+--   forall p a b r. (Strong p) =>
+--   p a b
+--   -> p { textColor :: a | r } { textColor :: b | r }
+-- atTextColor = textColor
 
-atBackColor ::
-  forall p a b r. (Strong p) =>
-  p a b
-  -> p { backColor :: a | r } { backColor :: b | r }
-atBackColor = backColor
+-- atBackColor ::
+--   forall p a b r. (Strong p) =>
+--   p a b
+--   -> p { backColor :: a | r } { backColor :: b | r }
+-- atBackColor = backColor
 
 
 delBtnDisabled :: forall a b r. Lens { "delBtnDisabled" :: a | r } { "delBtnDisabled" :: b | r } a b
@@ -242,11 +279,18 @@ note = lens _."note" (_ { "note" = _ })
 date :: forall a b r. Lens { "date" :: a | r } { "date" :: b | r } a b
 date = lens _."date" (_ { "date" = _ })
 
+blockText :: forall a b r. Lens { "blockText" :: a | r } { "blockText" :: b | r } a b
+blockText = lens _."blockText" (_ { "blockText" = _ })
+
+
 _BlacklistEntry :: Prism' BlacklistEntry
                      { link :: String
                      , name :: String
                      , note :: String
                      , date :: String
+                     , blockText :: String
+                     , textColor :: String
+                     , backColor :: String
                      }
 _BlacklistEntry = prism BlacklistEntry unwrap
   where
