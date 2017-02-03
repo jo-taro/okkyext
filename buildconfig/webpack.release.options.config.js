@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   context: path.normalize(__dirname + '/..'),
@@ -42,6 +43,10 @@ module.exports = {
       inject: 'body',
       filename: 'options.html'
     }),
+    new CopyWebpackPlugin([
+      { from: 'resources', to: './'},    // for svg and css
+      { from: 'manifest/manifest-release.json', to:'./manifest.json' },
+    ]),
   ],
   resolveLoader: {
     modules: [

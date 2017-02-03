@@ -72,6 +72,10 @@ module.exports = {
       inject: 'body',
       filename: 'options.html'
     }),
+    new CopyWebpackPlugin([
+      { from: 'resources', to: './'},    // for svg and css
+      { from: 'manifest/manifest-debug.json', to:'./manifest.json' },
+    ]),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
   ],
