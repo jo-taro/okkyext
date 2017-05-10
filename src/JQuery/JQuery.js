@@ -16,7 +16,6 @@ exports.cssp = function(props) {
             for (var p in props) {
               new_props[p.replace('_','-')] = props[p];
             } 
-            console.log(new_props);
             ob.css(new_props);
         };
     };
