@@ -10,7 +10,7 @@
     
     "content_scripts": [
         {
-        "matches": [ "http://okky.kr/*"],
+        "matches": [ "https://okky.kr/*"],
         "js": ["content.js"],
         "run_at": "document_start"
         }

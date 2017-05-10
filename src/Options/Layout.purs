@@ -89,7 +89,7 @@ update LinkAjaxFetch state =
           let headers = [ RequestHeader "GET" "Access-Control-Request-Method"
                         , RequestHeader "GET" "Access-Control-Request-Headers"
                         ]
-              nickUrl = "http://okky.kr" <> L.view atStateLink state
+              nickUrl = "https://okky.kr" <> L.view atStateLink state
               request = defaultRequest { url = nickUrl, headers = headers }
           
           httpResponse <- attempt $ affjax request

@@ -48,7 +48,7 @@ renderUser state entry =
               [ text $ L.view atName entry
               , br [] []
               , a
-                [ href $ "http://okky.kr" <> L.view atLink entry ]
+                [ href $ "https://okky.kr" <> L.view atLink entry ]
                 [text $ L.view atLink entry]
               ]
         , td

@@ -1,7 +1,7 @@
 {
     "name": "Okky Extension",
     "description": "okky.kr browser extension",
-    "version": "1.1.0",
+    "version": "1.1.1",
 
     "permissions": [
       "storage",
@@ -10,7 +10,7 @@
     
     "content_scripts": [
         {
-        "matches": [ "http://okky.kr/*"],
+        "matches": [ "https://okky.kr/*"],
         "js": ["content.min.js"],
         "run_at": "document_start"
         }
