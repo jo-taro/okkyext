@@ -1,6 +1,6 @@
 {
   "name": "okkyext",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "okky.kr extension",
   "main": "support/options-entry.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "release-parseworker": "webpack --config ./buildconfig/webpack.release.parseworker.config.js",
     "release-options": "webpack --config ./buildconfig/webpack.release.options.config.js",
     "debug": "npm run debug-background & npm run debug-content & npm run debug-parseworker & npm run debug-options",
-    "release": "npm run  release-background & npm run release-content & npm run release-parseworker & npm run release-options",
+    "release": "npm run  release-background && npm run release-content && npm run release-parseworker && npm run release-options",
     "clean-debug": "rimraf debug",
     "clean-release": "rimraf release",
     "clean-purs": "rimraf output",
@@ -42,7 +42,7 @@
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "rimraf": "^2.5.4",
-    "webpack": "^2.2.1",
+    "webpack": "^2.5.1",
     "webpack-dev-server": "^v2.2.0"
   },
   "devDependencies": {
